@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,6 +17,7 @@ public class RocketControllerC : MonoBehaviour
     {
         _energySystem = GetComponent<EnergySystemC>();
         _rocketMovement = GetComponent<RocketMovementC>();
+
     }
     
     private void FixedUpdate()
@@ -27,10 +29,23 @@ public class RocketControllerC : MonoBehaviour
         _rocketMovement.ApplyMovement(_movementDirection);
     }
 
-    // OnMove 구현
-    // private void OnMove...
+    private void OnMove(InputValue value)
+    {
+        float f = 0;
+        if (value.Get().ToString() == "(-1.00, 0.00)")
+        {
+            f = -1;
+        } else if(value.Get().ToString() == "(1.00, 0.00)")
+        {
+            f = 1;
+        }
 
+        _rocketMovement.ApplyMovement(f);
+    }
 
-    // OnBoost 구현
-    // private void OnBoost...
+    private void OnBoost(InputValue value)
+    {
+
+    }
+
 }

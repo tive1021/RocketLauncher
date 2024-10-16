@@ -36,6 +36,7 @@ public class RocketMovementC : MonoBehaviour
 
     private void Rotate(float inputX)
     {
-        // 움직임에 따라 회전을 바꿈 -> 회전을 바꾸고 그 방향으로 발사를 해야 그쪽으로 가겠죠?
+        float rotationAmount = inputX * ROTATIONSPEED * Time.deltaTime;
+        _rb2d.rotation -= rotationAmount;
     }
 }
