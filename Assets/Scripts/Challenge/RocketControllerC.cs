@@ -45,7 +45,7 @@ public class RocketControllerC : MonoBehaviour
 
     private void OnBoost(InputValue value)
     {
-
+        _rocketMovement.ApplyBoost();
     }
 
 }
