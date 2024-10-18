@@ -8,6 +8,7 @@ public class RocketControllerC : MonoBehaviour
     private RocketMovementC _rocketMovement;
     
     private bool _isMoving;
+    private int _isBoost = 0;
     private float _movementDirection;
     
     private readonly float ENERGY_TURN = 0.5f;
@@ -31,21 +32,20 @@ public class RocketControllerC : MonoBehaviour
 
     private void OnMove(InputValue value)
     {
-        float f = 0;
-        if (value.Get().ToString() == "(-1.00, 0.00)")
-        {
-            f = -1;
-        } else if(value.Get().ToString() == "(1.00, 0.00)")
-        {
-            f = 1;
-        }
-
-        _rocketMovement.ApplyMovement(f);
+        _isMoving = true;
     }
 
     private void OnBoost(InputValue value)
     {
-        _rocketMovement.ApplyBoost();
+        _isBoost++;
+        if (_isBoost == 2)
+        {
+            if (_energySystem.UseEnergy(ENERGY_BURST))
+            {
+                _rocketMovement.ApplyBoost();
+            }
+            _isBoost = 0;
+        }
     }
 
 }
