@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +7,6 @@ public class RocketControllerC : MonoBehaviour
     private RocketMovementC _rocketMovement;
     
     private bool _isMoving;
-    private int _isBoost = 0;
     private float _movementDirection;
     
     private readonly float ENERGY_TURN = 0.5f;
@@ -18,7 +16,6 @@ public class RocketControllerC : MonoBehaviour
     {
         _energySystem = GetComponent<EnergySystemC>();
         _rocketMovement = GetComponent<RocketMovementC>();
-
     }
     
     private void FixedUpdate()
@@ -30,22 +27,21 @@ public class RocketControllerC : MonoBehaviour
         _rocketMovement.ApplyMovement(_movementDirection);
     }
 
+    // OnMove 구현
+    // private void OnMove...
     private void OnMove(InputValue value)
     {
-        _isMoving = true;
+        float dir = value.Get<float>();
+        _isMoving = Mathf.Abs(dir) >= 0.1f;
+        _movementDirection = dir;
     }
 
+
+    // OnBoost 구현
+    // private void OnBoost...
     private void OnBoost(InputValue value)
     {
-        _isBoost++;
-        if (_isBoost == 2)
-        {
-            if (_energySystem.UseEnergy(ENERGY_BURST))
-            {
-                _rocketMovement.ApplyBoost();
-            }
-            _isBoost = 0;
-        }
+        if (!_energySystem.UseEnergy(ENERGY_BURST)) return;
+        _rocketMovement.ApplyBoost();
     }
-
 }

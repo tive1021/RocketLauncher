@@ -2,9 +2,7 @@
 
 public class AlertSystem : MonoBehaviour
 {
-    // fov가 45라면 45도 각도안에 있는 aesteriod를 인식할 수 있음.
     [SerializeField] private float fov = 45f;
-    // radius가 10이라면 반지름 10 범위에서 aesteriod들을 인식할 수 있음.
     [SerializeField] private float radius = 10f;
     private float alertThreshold;
 
@@ -15,6 +13,7 @@ public class AlertSystem : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         // FOV를 라디안으로 변환하고 코사인 값을 계산
+        alertThreshold = Mathf.Cos(fov * Mathf.Deg2Rad / 2f);
     }
 
     private void Update()
@@ -24,6 +23,24 @@ public class AlertSystem : MonoBehaviour
 
     private void CheckAlert()
     {
-        // 주변 반경의 소행성들을 확인하고 이를 감지하여 Alert를 발생시킴(isBlinking -> true)
+        // 'Aestroid' 레이어에 있는 모든 오브젝트를 탐색
+        int layerMask = LayerMask.GetMask("Aestroid");
+        var hits = Physics2D.CircleCastAll(transform.position, radius, Vector2.up, 0f, layerMask);
+        
+        bool needAlert = false;
+        foreach (var hit in hits)
+        {
+            // 목표물까지의 방향 계산
+            Vector2 directionToTarget = (hit.transform.position - transform.position).normalized;
+            // 'transform.up' 방향과의 내적을 이용해 시야각 검사
+            float cos = Vector2.Dot(directionToTarget, transform.up.normalized);
+            if (cos >= alertThreshold)
+            {
+                needAlert = true;
+                break;
+            }
+        }
+        // 애니메이션 상태 업데이트
+        animator.SetBool(blinking, needAlert);
     }
 }

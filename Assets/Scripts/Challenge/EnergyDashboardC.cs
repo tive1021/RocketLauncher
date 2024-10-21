@@ -7,12 +7,7 @@ public class EnergyDashboardC : MonoBehaviour
     [SerializeField] private Image fillBar;
     private void Start()
     {
-        fillBar.fillAmount = 1;
-    }
-
-    private void Update()
-    {
-        fillBar.fillAmount = energySystem.Fuel / energySystem.MaxFuel;
+        energySystem.OnEnergyChanged +=  ((amount) => fillBar.fillAmount = amount / energySystem.MaxFuel);
     }
 
 }

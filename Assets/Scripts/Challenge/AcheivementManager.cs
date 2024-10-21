@@ -3,7 +3,15 @@ using UnityEngine;
 
 public class AchievementManager : MonoBehaviour
 {
-    public static AchievementManager Instance;
+    private static AchievementManager instance;
+    public static AchievementManager Instance
+    {
+        get
+        {
+            if (instance == null) instance = FindObjectOfType<AchievementManager>();
+            return instance;
+        }
+    }
 
     private int currentThresholdIndex;
 
@@ -12,23 +20,27 @@ public class AchievementManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        instance = this;
+        achievements = achievements.OrderBy(a => a.threshold).ToArray();
     }
 
     private void Start()
     {
         achievementView.CreateAchievementSlots(achievements);  // UI 생성
+        RocketMovementC.OnHighScoreChanged += CheckAchievement;
     }
-
-    // 최고 높이를 달성했을 때 업적 달성 판단, 이벤트 기반으로 설계할 것
+    
     private void CheckAchievement(float height)
     {
-        for (int i = 0; i < achievements.Length; i++)
+        while (currentThresholdIndex < achievements.Length && height >= achievements[currentThresholdIndex].threshold)
         {
-            if (height > achievements[i].threshold)
+            if (!achievements[currentThresholdIndex].isUnlocked)
             {
-                achievements[i].isUnlocked = true;
+                achievements[currentThresholdIndex].isUnlocked = true;
+                Debug.Log($"Achievement unlocked: Reach {achievements[currentThresholdIndex].threshold}M!");
+                achievementView.UnlockAchievement(achievements[currentThresholdIndex].threshold);
             }
+            currentThresholdIndex++;  // 다음 업적 임계값으로 이동
         }
     }
 }

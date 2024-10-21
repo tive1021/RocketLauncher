@@ -36,7 +36,19 @@ public class RocketMovementC : MonoBehaviour
 
     private void Rotate(float inputX)
     {
-        Quaternion deltaRotation = Quaternion.Euler(_rb2d.velocity * inputX * ROTATIONSPEED * Time.deltaTime);
-        _rb2d.MoveRotation(deltaRotation);
+        Quaternion from = transform.localRotation;
+
+        (float x, float y) dir = inputX switch
+        {
+            >= 0.1f => (1, 0),
+            <= -0.1f => (-1, 0),
+            _ => (0, 1)
+        };
+        
+        Debug.Log(dir);
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        Quaternion to = Quaternion.Euler(0, 0, angle - 90);
+        Debug.Log(angle);
+        transform.localRotation = Quaternion.Slerp(from, to, ROTATIONSPEED);
     }
 }
