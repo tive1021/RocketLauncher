@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -10,12 +9,16 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
         get
         {
             // get instance of singleton
-            if(instance == null)
+            if (instance == null)
             {
-                instance = new Singleton<T>();
-                //Singleton<T>
-                //Singleton
-                //T
+                // øπø‹ √≥∏Æ - »§Ω√ æ¿ø° ΩÃ±€≈Ê¿Ã ¿÷¥¬¡ˆ
+                instance = (T)FindObjectOfType(typeof(T));
+                if (instance == null)
+                {
+                    string tName = typeof(T).ToString();
+                    var singletonObj = new GameObject(tName);
+                    instance = singletonObj.AddComponent<T>();
+                }
             }
 
             return instance;
@@ -25,6 +28,6 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     public void Awake()
     {
         // make it as dontdestroyobject
-        DontDestroyOnLoad(this);
+        DontDestroyOnLoad(instance);
     }
 }
