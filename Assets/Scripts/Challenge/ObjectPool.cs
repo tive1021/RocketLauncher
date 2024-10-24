@@ -45,9 +45,16 @@ public class ObjectPool : MonoBehaviour
             return obj;
         }
 
-        GameObject gameObject = CreateObject();
-        gameObject.SetActive(true);
-        return gameObject;
+        // 1번 구현사항 (임시로 생성 후 반환 시 파괴)
+        //GameObject gameObject = CreateObject();
+        //gameObject.SetActive(true);
+        //return gameObject;
+
+        // 2번 구현사항 (가장 오래전에 생성된 오브젝트를 반환 후 재사용)
+
+        // 3번 구현사항
+        // (오브젝트를 미리 생성하지 않고 부족할 경우 누적 100개까지 추가 생성,
+        // 100개가 넘어갈 경우 임시로 생성 후 반환 시 파괴)
     }
 
     public void ReleaseObject(GameObject obj)
