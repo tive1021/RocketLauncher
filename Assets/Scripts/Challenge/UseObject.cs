@@ -22,7 +22,7 @@ public class UseObject : MonoBehaviour
         while (true)
         {
             StartCoroutine(CreateAndReturnObject());
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
 
@@ -33,11 +33,22 @@ public class UseObject : MonoBehaviour
 
     IEnumerator CreateAndReturnObject()
     {
+        CreateObject();
+        yield return new WaitForSeconds(4f);
+        ReturnObject();
+    }
+
+    void CreateObject()
+    {
         GameObject obj = objectPool.GetObject();
         obj.transform.position = new Vector2(Random.Range(-20, 20), Random.Range(20, 40));
         gameObj.Add(obj);
-        yield return new WaitForSeconds(4f);
-        objectPool.ReleaseObject(obj);
-        gameObj.Remove(obj);
+       
+    }
+
+    void ReturnObject()
+    {
+        objectPool.ReleaseObject(gameObj[0]);
+        gameObj.Remove(gameObj[0]);
     }
 }
