@@ -53,7 +53,7 @@ public class ObjectPool : MonoBehaviour
     public void ReleaseObject(GameObject obj)
     {
         // [¿ä±¸½ºÆå 3] Release Object
-        if(pool.Count < maxSize)
+        if(pool.Contains(obj))
         {
             obj.SetActive(false);
         }

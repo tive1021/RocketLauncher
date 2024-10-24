@@ -36,7 +36,7 @@ public class UseObject : MonoBehaviour
         GameObject obj = objectPool.GetObject();
         obj.transform.position = new Vector2(Random.Range(-20, 20), Random.Range(20, 40));
         gameObj.Add(obj);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(4f);
         objectPool.ReleaseObject(obj);
         gameObj.Remove(obj);
     }
