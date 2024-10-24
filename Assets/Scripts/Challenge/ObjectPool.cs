@@ -37,15 +37,29 @@ public class ObjectPool : MonoBehaviour
             }
         }
 
-        GameObject newObj = Instantiate(objectPrefab);
-        newObj.SetActive(true);  // 바로 활성화 상태로 사용
-        pool.Add(newObj);
-        return newObj;
+        if (pool.Count < maxSize)
+        {
+            GameObject obj = CreateObject();
+            obj.SetActive(true);
+            pool.Add(obj);
+            return obj;
+        }
+
+        GameObject gameObject = CreateObject();
+        gameObject.SetActive(true);
+        return gameObject;
     }
 
     public void ReleaseObject(GameObject obj)
     {
         // [요구스펙 3] Release Object
-        obj.SetActive(false);
+        if(pool.Count < maxSize)
+        {
+            obj.SetActive(false);
+        }
+        else
+        {
+            Destroy(obj);
+        }
     }
 }
